@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import { INITIAL_STATE } from "./board_reducer";
+import { initialState } from "./board_slice";
 
 test("initial state", () => {
-  const state = INITIAL_STATE;
+  const state = initialState;
   expect(state.me.bench).toEqual([]);
 });

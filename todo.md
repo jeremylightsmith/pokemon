@@ -3,10 +3,10 @@
   - [x] save the deck in local storage
   - [x] show the current deck
   - [ ] save the original card (w/ all details)
-- [ ] build 2 decks separately (for now, yours and mine)
 
+- [ ] build 2 decks separately (for now, yours and mine)
 - [ ] play using yours and my decks (from local storage)
-- [ ] show > 250 records in building
+- [ ] show > 250 records in deck building (infinite scroll? or click more button)
 
 # Done
 

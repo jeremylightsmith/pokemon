@@ -13,7 +13,7 @@ export type DeckT = CardT[];
 export type SideT = {
   prizeCards: CardT[];
   bench: CardT[];
-  active: CardT;
+  active?: CardT;
   hand: CardT[];
   deck: CardT[];
   discardPile: CardT[];
@@ -22,7 +22,7 @@ export type SideT = {
 export type BoardT = {
   you: SideT;
   me: SideT;
-  lastMove: MoveT;
+  lastMove?: MoveT;
 };
 
 export type AllBoardsT = {
