@@ -1,6 +1,8 @@
 export type ColorT = "R" | "G" | "B" | "Y" | "W"; // red, green, blue, yellow, white
 export type CardT = string; // like G2, R1, Y5
 
+export type DeckT = CardT[];
+
 export type PlayerT = {
   hand: CardT[];
   notes: any;
