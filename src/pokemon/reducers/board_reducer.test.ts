@@ -2,6 +2,9 @@ import { expect, test } from "vitest";
 import boardReducer, { INITIAL_STATE } from "./board_reducer";
 import * as c from "../constants";
 
+test("initial state", () => {
+  const state = INITIAL_STATE;
+});
 test("starts the game", () => {
   const state = INITIAL_STATE;
   const { deck, discards, hintsLeft, lastMove, livesLeft, players } =

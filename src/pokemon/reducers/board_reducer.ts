@@ -15,6 +15,22 @@ import {
 import * as strategy from "../strategies/mod8_strategy";
 
 export const INITIAL_STATE = {
+  you: {
+    prizeCards: [],
+    bench: [],
+    active: null,
+    hand: [],
+    deck: [],
+    discardPile: [],
+  },
+  me: {
+    prizeCards: [],
+    bench: [],
+    active: null,
+    hand: [],
+    deck: [],
+    discardPile: [],
+  },
   turn: 0,
   deck: [],
   players: [],

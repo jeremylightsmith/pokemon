@@ -2,8 +2,26 @@ import "./App.css";
 import { startGame } from "./pokemon/actions";
 import reducer from "./pokemon/reducers/history_reducer";
 import { Provider } from "react-redux";
-import BoardHistory from "./pokemon/components/board_history";
 import { configureStore } from "@reduxjs/toolkit";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Root from "./routes/root";
+import Play from "./routes/play";
+import BuildDeck from "./routes/build_deck";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+  },
+  {
+    path: "/play",
+    element: <Play />,
+  },
+  {
+    path: "/build",
+    element: <BuildDeck />,
+  },
+]);
 
 function App() {
   const store = configureStore({
@@ -15,7 +33,7 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <BoardHistory />
+        <RouterProvider router={router} />
       </Provider>
     </>
   );
