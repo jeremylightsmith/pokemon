@@ -1,8 +1,8 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import type { BoardT } from "../types";
 
-import Board from "./board";
+import PokeBoard from "./poke_board";
 
 import "./board_history.css";
 
@@ -28,7 +28,7 @@ const BoardHistory: React.FC = () => {
   return (
     <div className="board-history">
       <div className="board-container">
-        <Board board={currentBoard} />
+        <PokeBoard board={currentBoard} />
       </div>
 
       <div className="history-container">

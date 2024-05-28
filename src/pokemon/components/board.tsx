@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { identity, times } from "ramda";
