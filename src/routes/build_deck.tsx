@@ -48,12 +48,16 @@ const BuildDeck: React.FC = () => {
     <div>
       <h1>Build Deck</h1>
 
-      <input
-        type="text"
-        placeholder="Enter search term"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="flex gap-2 pb-4 content-center">
+        <div className="mt-1">Search</div>
+        <input
+          type="text"
+          placeholder="Enter search term"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-gray-300 rounded py-1 px-2"
+        />
+      </div>
 
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
