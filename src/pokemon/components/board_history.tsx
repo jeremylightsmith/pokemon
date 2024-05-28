@@ -1,13 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import type { BoardT } from "../types";
+import { useSelector, TypedUseSelectorHook } from "react-redux";
+import type { BoardT, AllBoardsT, MoveT } from "../types";
 
-import PokeBoard from "./poke_board";
+import Board from "./board";
 
 import "./board_history.css";
 
-const HistoryLink = ({ board, index }: { board: BoardT; index: number }) => {
-  const toString = (move) => {
+const HistoryLink: React.FC<{ board: BoardT; index: number }> = ({
+  board,
+  index: _,
+}) => {
+  const toString = (move: MoveT | undefined) => {
     if (!move) return "initial board";
     switch (move.type) {
       case "play":
@@ -15,7 +18,7 @@ const HistoryLink = ({ board, index }: { board: BoardT; index: number }) => {
       case "discard":
         return `P${move.player}: discard ${move.card}`;
       case "hint":
-        return `P${move.player}: hint ${JSON.stringify(move.hint)}`;
+        return `P${move.player}: hint}`;
     }
   };
 
@@ -23,12 +26,14 @@ const HistoryLink = ({ board, index }: { board: BoardT; index: number }) => {
 };
 
 const BoardHistory: React.FC = () => {
-  const { currentBoard, boards } = useSelector((state: any) => state);
+  const useTypedSelector: TypedUseSelectorHook<AllBoardsT> = useSelector;
+
+  const { currentBoard, boards } = useTypedSelector((state) => state);
 
   return (
     <div className="board-history">
       <div className="board-container">
-        <PokeBoard board={currentBoard} />
+        <Board board={currentBoard} />
       </div>
 
       <div className="history-container">

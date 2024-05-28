@@ -31,3 +31,9 @@ export const fetchWithCache = async (url: string) => {
 
   return data;
 };
+
+export const findCards = async (searchTerm: string) => {
+  return fetchWithCache(
+    `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&select=id,name,images`,
+  );
+};

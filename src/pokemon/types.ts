@@ -3,30 +3,6 @@ export type CardT = string; // like G2, R1, Y5
 
 export type DeckT = CardT[];
 
-export type PlayerT = {
-  hand: CardT[];
-  notes: any;
-};
-
-export type HintT = {
-  player: number;
-  cards: number[];
-  color?: ColorT;
-  number?: number;
-};
-
-export type MoveT =
-  | {
-      type: "hint";
-      player: number;
-      hint: HintT;
-    }
-  | {
-      type: "play" | "discard";
-      player: number;
-      card: number;
-    };
-
 export type SideT = {
   prizeCards: CardT[];
   bench: CardT[];
@@ -39,21 +15,24 @@ export type SideT = {
 export type BoardT = {
   you: SideT;
   me: SideT;
-  turn: number;
-  deck: CardT[];
-  players: PlayerT[];
-  discards: CardT[];
-  table: { [key in ColorT]?: number };
-  lastMove?: MoveT;
-  livesLeft: number;
-  hintsLeft: number;
-  lastTurn?: number; // set when the cards run out
+  lastMove: MoveT;
 };
 
 export type AllBoardsT = {
   currentBoard: BoardT;
   boards: BoardT[];
 };
+
+export type MoveT =
+  | {
+      type: "hint";
+      player: number;
+    }
+  | {
+      type: "play" | "discard";
+      player: number;
+      card: number;
+    };
 
 // prize cards, start game w/ 6, then claim when you beat a pokemon
 // game is won when prize cards are gone

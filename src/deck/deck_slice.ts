@@ -3,6 +3,7 @@ import { DeckT } from "../pokemon/types";
 
 interface DeckState {
   decks: DeckT[];
+  openDeck: DeckT[];
 }
 
 const initialState = {

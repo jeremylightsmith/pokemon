@@ -1,5 +1,5 @@
 import React from "react";
-import { fetchWithCache } from "../pokemon/card_api";
+import { findCards } from "../pokemon/card_api";
 import { useEffect, useState } from "react";
 
 const Card: React.FC<{ card: any }> = ({ card }) => {
@@ -27,16 +27,11 @@ const BuildDeck: React.FC = () => {
       setError(null);
 
       try {
-        console.log("start");
-        const response = await fetchWithCache(
-          `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&select=id,name,images`,
-        );
-        // console.log("maybe");
-        console.log("response", response);
-        // console.log("data", data);
+        const response = await findCards(searchTerm);
         setResults(response.data); // Adjust according to the structure of your API response
       } catch (error) {
-        setError(error.message);
+        if (error instanceof Error) setError(error.message);
+        else setError("An unknown error occurred");
       } finally {
         setLoading(false);
       }
@@ -64,7 +59,7 @@ const BuildDeck: React.FC = () => {
       {error && <p>Error: {error}</p>}
 
       <div className="flex gap-2 flex-wrap">
-        {results.map((result, index) => (
+        {results.map((result, _index) => (
           <Card card={result} key={result.id} />
         ))}
       </div>

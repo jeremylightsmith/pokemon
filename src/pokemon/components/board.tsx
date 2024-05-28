@@ -1,177 +1,109 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { identity, times } from "ramda";
-import { advance, discardCard, playCard, startGame } from "../actions";
-import { BoardT, CardT, ColorT, PlayerT } from "../types";
+import { BoardT, CardT } from "../types";
 
-import "./board.css";
-import { COLORS, getCurrentPlayer } from "../model";
-
-const Card = ({
-  card,
-  onClick,
-  selected,
-}: {
-  card: CardT;
-  onClick?: () => void;
-  selected?: boolean;
-}) => (
-  <div
-    className={`card color-${card[0]} ${selected ? "selected" : ""}`}
-    onClick={onClick}
-  >
-    {card[1]}{" "}
-  </div>
-);
-
-const EmptyCard = () => {
-  return <div className="card empty-card" />;
-};
-
-interface PlayerProps {
-  player: PlayerT;
-  dispatch: any;
-  index: number;
-  current: boolean;
-}
-
-const Player: React.FC<PlayerProps> = ({ player, index, current }) => {
-  const [selected, setSelected] = useState<number | null>(null);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!current && selected !== null) {
-      setSelected(null);
-    }
-  }, [current, selected]);
-
-  const renderCard = (card: CardT, i: number) => {
-    const onClick = current
-      ? () => setSelected(selected === i ? null : i)
-      : undefined;
-
-    return (
-      <Card card={card} selected={selected === i} onClick={onClick} key={i} />
-    );
-  };
-
-  return (
-    <div className="player">
-      <h4>
-        Player {index} {current ? "(on deck)" : ""}
-      </h4>
-      <div className="hand">{player.hand.map(renderCard)}</div>
-      {selected !== null && (
-        <div className="actions">
-          <button
-            onClick={() => {
-              dispatch(playCard(index, selected));
-              setSelected(null);
-            }}
-          >
-            Play
-          </button>
-          <button
-            onClick={() => {
-              dispatch(discardCard(index, selected));
-              setSelected(null);
-            }}
-          >
-            Discard
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Table = ({ table }: { table: { [key in ColorT]: number } }) => (
-  <div className="table">
-    <h4>Table</h4>
-
-    {COLORS.map((color) =>
-      table[color] !== undefined ? (
-        <Card card={`${color}${table[color]}`} key={color} />
-      ) : (
-        <EmptyCard key={color} />
-      ),
-    )}
-  </div>
-);
-
-const Discards = ({ discards }: { discards: CardT[] }) => (
-  <div className="table">
-    <h4>Discards</h4>
-
-    {discards.map((card) => (
-      <Card card={card} />
-    ))}
-  </div>
-);
-
-const Lives = ({ lives }: { lives: number }) => (
-  <div className="lives">
-    <h4>Lives</h4>
-
-    {times(identity, lives).map((i) => (
-      <div className="life circle" key={i} />
-    ))}
-  </div>
-);
-
-const Hints = ({ hints }: { hints: number }) => (
-  <div className="hints">
-    <h4>Hints</h4>
-
-    {times(identity, hints).map((i) => (
-      <div className="hint circle" key={i} />
-    ))}
+const DiscardPile = ({ cards }: { cards: CardT[] }) => (
+  <div className="DiscardPile">
+    <Card card={`discards (${cards.length})`} />
   </div>
 );
 
 const Deck = ({ cards }: { cards: CardT[] }) => (
-  <div className="deck">
-    <h4>Deck</h4>
-    {cards.length} cards left
+  <div className="Deck">
+    <Card card={`deck (${cards.length})`} />
   </div>
 );
 
-interface BoardProps {
-  board: BoardT;
-}
-
-const Board: React.FC<BoardProps> = ({ board }) => {
-  const dispatch = useDispatch();
-  const { table, discards, deck, players, livesLeft, hintsLeft } = board;
-  const currentPlayer = getCurrentPlayer(board);
-
+const Card = ({ card }: { card: String }) => {
   return (
-    <div className="board">
-      <Table table={table} />
-      <Discards discards={discards} />
-      <Lives lives={livesLeft} />
-      <Hints hints={hintsLeft} />
-      <Deck cards={deck} />
+    <div className="Card w-16 h-24 bg-white border border-gray-400">{card}</div>
+  );
+};
 
-      <div className="players">
-        {players &&
-          players.map((player, i) => (
-            <Player
-              player={player}
-              dispatch={dispatch}
-              key={i}
-              index={i}
-              current={currentPlayer === i}
-            />
-          ))}
+const PrizeCards = () => {
+  return (
+    <div className="PrizeCards">
+      <div className="grid grid-rows-6 grid-flow-col h-24">
+        <Card card="r1" />
+        <Card card="r2" />
+        <Card card="r3" />
+        <Card card="r4" />
+        <Card card="r5" />
+        <Card card="r6" />
       </div>
+    </div>
+  );
+};
 
-      <button className="advance" onClick={() => dispatch(advance())}>
-        Advance
-      </button>
-      <button className="start-game" onClick={() => dispatch(startGame())}>
-        Restart Game
-      </button>
+const ActiveSpot = () => {
+  return (
+    <div className="ActiveSpot justify-center flex">
+      <Card card="active" />
+    </div>
+  );
+};
+
+const Bench = () => {
+  return (
+    <div className="Bench grid grid-rows-1 grid-flow-col gap-1">
+      <Card card="r1" />
+      <Card card="r2" />
+      <Card card="r3" />
+      <Card card="r4" />
+      <Card card="r5" />
+    </div>
+  );
+};
+
+const Hand = () => {
+  return (
+    <div className="Hand">
+      <div className="text-left text-xs">Hand</div>
+      <div className="Hand grid grid-rows-2 grid-flow-col gap-x-1 gap-y-1">
+        <Card card="r1" />
+        <Card card="r2" />
+        <Card card="r3" />
+        <Card card="r4" />
+        <Card card="r5" />
+        <Card card="r6" />
+        <Card card="r7" />
+      </div>
+    </div>
+  );
+};
+const Board = ({ board }: { board: BoardT }) => {
+  const { you, me } = board;
+  console.log("you", you);
+  console.log("me", me);
+  return (
+    <div className="p-4 gap-4 flex flex-col">
+      <div className="flex gap-8">
+        <div className="flex gap-4">
+          <div className="flex flex-col justify-between gap-4">
+            <DiscardPile cards={[]} />
+            <Deck cards={[]} />
+          </div>
+          <div className="flex flex-col justify-between">
+            <Bench />
+            <ActiveSpot />
+          </div>
+          <PrizeCards />
+        </div>
+        <Hand />
+      </div>
+      <hr />
+      <div className="flex gap-8">
+        <div className="flex gap-4">
+          <PrizeCards />
+          <div className="flex flex-col justify-between">
+            <ActiveSpot />
+            <Bench />
+          </div>
+          <div className="flex flex-col justify-between gap-4">
+            <Deck cards={[]} />
+            <DiscardPile cards={[]} />
+          </div>
+        </div>
+        <Hand />
+      </div>
     </div>
   );
 };
