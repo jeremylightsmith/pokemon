@@ -4,8 +4,6 @@ import type { BoardT, AllBoardsT, MoveT } from "../types";
 
 import Board from "./board";
 
-import "./board_history.css";
-
 const HistoryLink: React.FC<{ board: BoardT; index: number }> = ({
   board,
   index: _,
@@ -22,7 +20,9 @@ const HistoryLink: React.FC<{ board: BoardT; index: number }> = ({
     }
   };
 
-  return <div className="history-link">{toString(board.lastMove)}</div>;
+  return (
+    <div className="bg-white rounded px-1">{toString(board.lastMove)}</div>
+  );
 };
 
 const BoardHistory: React.FC = () => {
@@ -31,17 +31,16 @@ const BoardHistory: React.FC = () => {
   const { currentBoard, boards } = useTypedSelector((state) => state);
 
   return (
-    <div className="board-history">
-      <div className="board-container">
+    <div className="BoardHistory flex">
+      <div className="board-container flex-auto overflow-auto">
         <Board board={currentBoard} />
       </div>
 
-      <div className="history-container">
-        <div className="history">
-          {boards.map((board, i) => (
-            <HistoryLink key={i} board={board} index={i} />
-          ))}
-        </div>
+      <div className="bg-red-800 w-60 flex-none py-1 px-2">
+        <div className="text-white pb-1">History</div>
+        {boards.map((board, i) => (
+          <HistoryLink key={i} board={board} index={i} />
+        ))}
       </div>
     </div>
   );

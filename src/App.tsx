@@ -5,8 +5,8 @@ import BuildDeck from "./routes/build_deck";
 
 const Layout = () => {
   return (
-    <div className="container mx-auto px-4">
-      <nav className="w-full flex justify-between">
+    <div>
+      <nav className="py-2 px-4 bg-slate-700 text-white w-full flex justify-between">
         <div>Pokemon TCG Simulator</div>
         <ul className="flex gap-2">
           <li>
@@ -20,7 +20,9 @@ const Layout = () => {
 
       <hr />
 
-      <Outlet />
+      <main className="p-4">
+        <Outlet />
+      </main>
     </div>
   );
 };
