@@ -2,6 +2,7 @@ import { Link, Outlet, HashRouter, Routes, Route } from "react-router-dom";
 import Root from "./routes/root";
 import Play from "./routes/play";
 import BuildDeck from "./routes/build_deck";
+import ErrorBoundary from "./components/error_boundary";
 
 const Layout = () => {
   return (
@@ -21,7 +22,9 @@ const Layout = () => {
       <hr />
 
       <main className="">
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </main>
     </div>
   );

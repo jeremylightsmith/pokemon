@@ -1,7 +1,8 @@
 - [ ] build a deck
-  - [ ] select a card for the deck
-  - [ ] save the deck in local storage
-  - [ ] show the current deck
+  - [x] select a card for the deck
+  - [x] save the deck in local storage
+  - [x] show the current deck
+  - [ ] save the original card (w/ all details)
 - [ ] build 2 decks separately (for now, yours and mine)
 
 - [ ] play using yours and my decks (from local storage)

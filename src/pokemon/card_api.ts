@@ -14,13 +14,7 @@ export const fetchWithCache = async (url: string) => {
     return JSON.parse(cachedData);
   }
 
-  // If no cached data or cache is expired, fetch from the network
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-
-  const data = await response.json();
+  const data = fetchNoCache(url);
 
   // Cache the response
   localStorage.setItem(cacheKey, JSON.stringify(data));
@@ -32,8 +26,17 @@ export const fetchWithCache = async (url: string) => {
   return data;
 };
 
+export const fetchNoCache = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  return await response.json();
+};
+
 export const findCards = async (searchTerm: string) => {
-  return fetchWithCache(
+  return fetchNoCache(
     `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&select=id,name,images`,
   );
 };

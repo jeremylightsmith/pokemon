@@ -1,9 +1,8 @@
-import React from "react";
-import { findCards } from "../pokemon/card_api";
-import { useEffect, useState } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import reducer, { addCard } from "../deck/deck_slice";
+import React, { useEffect, useState } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import reducer, { addCard, saveDeck, loadDeck } from "../deck/deck_slice";
+import { findCards } from "../pokemon/card_api";
 
 const Card: React.FC<{ card: any }> = ({ card }) => {
   const dispatch = useDispatch();
@@ -76,9 +75,20 @@ const CardSearcher: React.FC = () => {
 
 const Deck: React.FC = () => {
   const cards = useSelector((state: any) => state.openDeck);
+  const dispatch = useDispatch();
   return (
     <div>
-      <div>Deck</div>
+      <div className="flex justify-between">
+        <div>Deck ({cards.length})</div>
+        <div>
+          <button
+            onClick={() => dispatch(saveDeck())}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+          >
+            Save
+          </button>
+        </div>
+      </div>
 
       <div className="flex gap-2 flex-wrap">
         {cards.map((card: any, index: number) => (
@@ -93,7 +103,7 @@ const BuildDeck: React.FC = () => {
   const store = configureStore({
     reducer: reducer,
   });
-  // store.dispatch(startGame());
+  store.dispatch(loadDeck());
   return (
     <Provider store={store}>
       <div className="flex">
