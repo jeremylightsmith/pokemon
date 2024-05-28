@@ -1,16 +1,21 @@
 import React from "react";
 import { findCards } from "../pokemon/card_api";
 import { useEffect, useState } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import reducer, { addCard } from "../deck/deck_slice";
 
 const Card: React.FC<{ card: any }> = ({ card }) => {
+  const dispatch = useDispatch();
+
   return (
-    <div className="Card">
-      <img src={card.images.small} alt={card.name} />
+    <div className="Card" onClick={() => dispatch(addCard(card))}>
+      <img className="w-48" src={card.images.small} alt={card.name} />
     </div>
   );
 };
 
-const BuildDeck: React.FC = () => {
+const CardSearcher: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,8 +51,6 @@ const BuildDeck: React.FC = () => {
 
   return (
     <div>
-      <h1>Build Deck</h1>
-
       <div className="flex gap-2 pb-4 content-center">
         <div className="mt-1">Search</div>
         <input
@@ -68,6 +71,40 @@ const BuildDeck: React.FC = () => {
         ))}
       </div>
     </div>
+  );
+};
+
+const Deck: React.FC = () => {
+  const cards = useSelector((state: any) => state.openDeck);
+  return (
+    <div>
+      <div>Deck</div>
+
+      <div className="flex gap-2 flex-wrap">
+        {cards.map((card: any, index: number) => (
+          <Card card={card} key={index} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const BuildDeck: React.FC = () => {
+  const store = configureStore({
+    reducer: reducer,
+  });
+  // store.dispatch(startGame());
+  return (
+    <Provider store={store}>
+      <div className="flex">
+        <div className="w-1/2 py-2 px-4">
+          <Deck />
+        </div>
+        <div className="w-1/2 bg-gray-200 py-2 px-4">
+          <CardSearcher />
+        </div>
+      </div>
+    </Provider>
   );
 };
 

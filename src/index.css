@@ -59,7 +59,7 @@ button:focus-visible {
 @tailwind utilities;
 
 h1 {
-    font-size: 2em;
+    font-size: 1.6em;
     line-height: 1.1;
     padding-bottom: 8px;
 }

@@ -1,5 +1,12 @@
 export type ColorT = "R" | "G" | "B" | "Y" | "W"; // red, green, blue, yellow, white
-export type CardT = string; // like G2, R1, Y5
+export type CardT = {
+  id: string;
+  name: string;
+  images: {
+    small: string;
+    large: string;
+  };
+};
 
 export type DeckT = CardT[];
 

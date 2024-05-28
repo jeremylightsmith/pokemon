@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { DeckT } from "../pokemon/types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { CardT, DeckT } from "../pokemon/types";
 
 interface DeckState {
   decks: DeckT[];
-  openDeck: DeckT[];
+  openDeck: DeckT;
 }
 
 const initialState = {
@@ -14,8 +14,12 @@ const initialState = {
 const deckSlice = createSlice({
   name: "decks",
   initialState,
-  reducers: {},
+  reducers: (create) => ({
+    addCard: create.reducer((state, action: PayloadAction<CardT>) => {
+      state.openDeck.push(action.payload);
+    }),
+  }),
 });
 
-export const {} = deckSlice.actions;
+export const { addCard } = deckSlice.actions;
 export default deckSlice.reducer;
