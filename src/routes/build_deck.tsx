@@ -1,15 +1,34 @@
 import { configureStore } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import reducer, { addCard, saveDeck, loadDeck } from "../deck/deck_slice";
+import reducer, {
+  addCard,
+  removeCard,
+  saveDeck,
+  loadDeck,
+} from "../deck/deck_slice";
 import { findCards } from "../pokemon/card_api";
+import { CardT } from "../pokemon/types";
+import { Button } from "../components/core_components";
 
-const Card: React.FC<{ card: any }> = ({ card }) => {
+interface CardProps {
+  card: CardT;
+  index: number;
+  showAdd?: boolean;
+  showRemove?: boolean;
+}
+const Card: React.FC<CardProps> = ({ card, index, ...props }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="Card" onClick={() => dispatch(addCard(card))}>
+    <div className="Card">
       <img className="w-48" src={card.images.small} alt={card.name} />
+      {props.showAdd && (
+        <Button onClick={() => dispatch(addCard(card))} text="Add" />
+      )}
+      {props.showRemove && (
+        <Button onClick={() => dispatch(removeCard(index))} text="Remove" />
+      )}
     </div>
   );
 };
@@ -65,8 +84,8 @@ const CardSearcher: React.FC = () => {
       {error && <p>Error: {error}</p>}
 
       <div className="flex gap-2 flex-wrap">
-        {results.map((result, _index) => (
-          <Card card={result} key={result.id} />
+        {results.map((result, index) => (
+          <Card card={result} key={index} index={index} showAdd />
         ))}
       </div>
     </div>
@@ -81,18 +100,13 @@ const Deck: React.FC = () => {
       <div className="flex justify-between">
         <div>Deck ({cards.length})</div>
         <div>
-          <button
-            onClick={() => dispatch(saveDeck())}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
-          >
-            Save
-          </button>
+          <Button primary onClick={() => dispatch(saveDeck())} text="Save" />
         </div>
       </div>
 
       <div className="flex gap-2 flex-wrap">
         {cards.map((card: any, index: number) => (
-          <Card card={card} key={index} />
+          <Card card={card} key={index} index={index} showRemove />
         ))}
       </div>
     </div>

@@ -23,6 +23,9 @@ const deckSlice = createAppSlice({
     addCard: create.reducer((state, action: PayloadAction<CardT>) => {
       state.openDeck.push(action.payload);
     }),
+    removeCard: create.reducer((state, action: PayloadAction<number>) => {
+      state.openDeck.splice(action.payload, 1);
+    }),
     saveDeck: create.reducer((state) => {
       localStorage.setItem("deck", JSON.stringify(state.openDeck));
     }),
@@ -35,5 +38,5 @@ const deckSlice = createAppSlice({
   }),
 });
 
-export const { addCard, saveDeck, loadDeck } = deckSlice.actions;
+export const { addCard, removeCard, saveDeck, loadDeck } = deckSlice.actions;
 export default deckSlice.reducer;
