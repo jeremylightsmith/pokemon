@@ -1,20 +1,20 @@
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root";
 import Play from "./routes/play";
 import BuildDeck from "./routes/build_deck";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
-    path: "/pokemon/",
+    path: "/",
     element: <Root />,
   },
   {
-    path: "/pokemon/play",
+    path: "/play",
     element: <Play />,
   },
   {
-    path: "/pokemon/build",
+    path: "/build",
     element: <BuildDeck />,
   },
 ]);
