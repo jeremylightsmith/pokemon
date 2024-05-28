@@ -37,13 +37,12 @@ body {
     }
 }
 
-$circle-size: 15px;
 .circle {
-    height: $circle-size;
-    width: $circle-size;
-    -webkit-border-radius: $circle-size;
-    -moz-border-radius: $circle-size;
-    border-radius: $circle-size;
+    height: var(--circle-size);
+    width: var(--circle-size);
+    -webkit-border-radius: var(--circle-size);
+    -moz-border-radius: var(--circle-size);
+    border-radius: var(--circle-size);
     display: inline-block;
     margin-right: 3px;
 }

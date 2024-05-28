@@ -1,4 +1,6 @@
-$history-container-width: 200px;
+:root {
+    --history-container-width: 200px;
+}
 
 .board-history {
     .board-container {
@@ -6,7 +8,7 @@ $history-container-width: 200px;
         top: 0;
         left: 0;
         bottom: 0;
-        right: $history-container-width;
+        right: var(--history-container-width);
         overflow: auto;
     }
     .history-container {
@@ -15,7 +17,7 @@ $history-container-width: 200px;
         top: 0;
         bottom: 0;
         right: 0;
-        width: $history-container-width;
+        width: var(--history-container-width);
         overflow: auto;
         .history {
             .history-link {
