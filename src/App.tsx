@@ -6,15 +6,15 @@ import BuildDeck from "./routes/build_deck";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/pokemon/",
     element: <Root />,
   },
   {
-    path: "/play",
+    path: "/pokemon/play",
     element: <Play />,
   },
   {
-    path: "/build",
+    path: "/pokemon/build",
     element: <BuildDeck />,
   },
 ]);
