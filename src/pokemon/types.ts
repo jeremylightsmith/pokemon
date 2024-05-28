@@ -25,7 +25,18 @@ export type MoveT =
       card: number;
     };
 
+export type SideT = {
+  prizeCards: CardT[];
+  bench: CardT[];
+  active: CardT;
+  hand: CardT[];
+  deck: CardT[];
+  discardPile: CardT[];
+};
+
 export type BoardT = {
+  you: SideT;
+  me: SideT;
   turn: number;
   deck: CardT[];
   players: PlayerT[];
