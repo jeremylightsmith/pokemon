@@ -15,7 +15,8 @@ export const Button: React.FC<ButtonProps> = ({ text, ...props }) => {
   if (props.primary) {
     classes += " bg-blue-500 hover:bg-blue-700 text-white";
   } else {
-    classes += " bg-gray-500 hover:bg-gray-700 text-white";
+    classes +=
+      " bg-gray-300 hover:bg-gray-400 text-gray-700 border border-gray-500";
   }
 
   props = omit(["primary", "className"], props);

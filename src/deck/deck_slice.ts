@@ -21,7 +21,7 @@ const deckSlice = createAppSlice({
   initialState,
   reducers: (create) => ({
     addCard: create.reducer((state, action: PayloadAction<CardT>) => {
-      state.openDeck.push(action.payload);
+      state.openDeck.unshift(action.payload);
     }),
     removeCard: create.reducer((state, action: PayloadAction<number>) => {
       state.openDeck.splice(action.payload, 1);

@@ -21,14 +21,16 @@ const Card: React.FC<CardProps> = ({ card, index, ...props }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="Card">
+    <div className="Card relative group">
       <img className="w-48" src={card.images.small} alt={card.name} />
-      {props.showAdd && (
-        <Button onClick={() => dispatch(addCard(card))} text="Add" />
-      )}
-      {props.showRemove && (
-        <Button onClick={() => dispatch(removeCard(index))} text="Remove" />
-      )}
+      <div className="absolute bottom-2 right-2 invisible group-hover:visible">
+        {props.showAdd && (
+          <Button onClick={() => dispatch(addCard(card))} text="Add" />
+        )}
+        {props.showRemove && (
+          <Button onClick={() => dispatch(removeCard(index))} text="Remove" />
+        )}
+      </div>
     </div>
   );
 };
@@ -97,7 +99,7 @@ const Deck: React.FC = () => {
   const dispatch = useDispatch();
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-2">
         <div>Deck ({cards.length})</div>
         <div>
           <Button primary onClick={() => dispatch(saveDeck())} text="Save" />
