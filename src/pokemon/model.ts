@@ -1,9 +1,12 @@
-import { assocPath, curry, pipe, remove, splitAt, update } from "ramda";
+import { assocPath, curry, pipe, remove, splitAt } from "ramda";
 import { BoardT, DeckT, SideT } from "./types";
 
 export const useDecks = curry(
   ({ me, you }: { me: DeckT; you: DeckT }, board: BoardT): BoardT =>
-    pipe(assocPath(["me", "deck"], me), assocPath(["you", "deck"], you))(board),
+    pipe(
+      assocPath(["me", "deck"], me),
+      assocPath(["you", "deck"], you),
+    )(board) as BoardT,
 );
 
 export const shuffle = curry((board: BoardT) => bothSides(shuffleDeck, board));

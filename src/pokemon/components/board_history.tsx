@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, TypedUseSelectorHook } from "react-redux";
+import { useSelector } from "react-redux";
 import type { BoardT, AllBoardsT, MoveT } from "../types";
 
 import Board from "./board";
@@ -28,9 +28,8 @@ const HistoryLink: React.FC<{ board: BoardT; index: number }> = ({
 };
 
 const BoardHistory: React.FC = () => {
-  const useTypedSelector: TypedUseSelectorHook<AllBoardsT> = useSelector;
-
-  const { currentBoard, boards } = useTypedSelector((state) => state);
+  const currentBoard = useSelector((state: AllBoardsT) => state.currentBoard);
+  const boards = useSelector((state: AllBoardsT) => state.boards);
 
   return (
     <div className="BoardHistory flex">

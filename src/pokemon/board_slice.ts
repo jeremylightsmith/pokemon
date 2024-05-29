@@ -27,16 +27,13 @@ const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: (create) => ({
-    startGame: create.reducer((state) => {
+    startGame: create.reducer((state: BoardT) => {
       const deck = JSON.parse(localStorage.getItem("deck") || "[]");
-      return pipe(
+      return pipe<[BoardT], BoardT, BoardT, BoardT>(
         useDecks({ me: deck, you: deck }),
         shuffle(),
         setupBoard(),
       )(state);
-
-      state.you.deck = deck;
-      state.me.deck = deck;
     }),
   }),
 });

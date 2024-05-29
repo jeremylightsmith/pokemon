@@ -37,13 +37,13 @@ const Card = ({ card }: { card: CardT | string }) => {
   );
 };
 
-const CardOrPlaceholder = ({ card }: { card?: CardT }) => {
-  if (card) {
-    return <Card card={card} />;
-  } else {
-    return <Card card="?" />;
-  }
-};
+// const CardOrPlaceholder = ({ card }: { card?: CardT }) => {
+//   if (card) {
+//     return <Card card={card} />;
+//   } else {
+//     return <Card card="?" />;
+//   }
+// };
 
 const PrizeCards = ({ cards }: { cards: CardT[] }) => {
   return (
