@@ -21,7 +21,9 @@ const HistoryLink: React.FC<{ board: BoardT; index: number }> = ({
   };
 
   return (
-    <div className="bg-white rounded px-1">{toString(board.lastMove)}</div>
+    <div className="bg-white text-black rounded px-1 mb-2">
+      {toString(board.lastMove)}
+    </div>
   );
 };
 

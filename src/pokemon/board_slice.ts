@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { BoardT } from "./types";
+import { pipe } from "ramda";
+import { useDecks, shuffle, setupBoard } from "./model";
 
 export const initialState: BoardT = {
   you: {
@@ -27,6 +29,12 @@ const boardSlice = createSlice({
   reducers: (create) => ({
     startGame: create.reducer((state) => {
       const deck = JSON.parse(localStorage.getItem("deck") || "[]");
+      return pipe(
+        useDecks({ me: deck, you: deck }),
+        shuffle(),
+        setupBoard(),
+      )(state);
+
       state.you.deck = deck;
       state.me.deck = deck;
     }),

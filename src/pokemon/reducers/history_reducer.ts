@@ -1,5 +1,3 @@
-// import { append, last } from "ramda";
-// import * as c from "../constants";
 import { append } from "ramda";
 import boardReducer, {
   initialState as INITIAL_BOARD_STATE,

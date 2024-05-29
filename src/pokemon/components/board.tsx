@@ -26,31 +26,32 @@ const Deck = ({ cards }: { cards: CardT[] }) => {
 };
 
 const Card = ({ card }: { card: CardT | string }) => {
-  if (typeof card === "string") {
-    return (
-      <div className="Card w-16 h-24 bg-white border border-gray-400">
-        {card}
-      </div>
-    );
+  return (
+    <div className="Card w-32 h-44 text-black bg-white border border-gray-400">
+      {typeof card === "string" ? (
+        <div className="w-full p-4 text-center">{card}</div>
+      ) : (
+        <img src={card.images.small} className="w-full" />
+      )}
+    </div>
+  );
+};
+
+const CardOrPlaceholder = ({ card }: { card?: CardT }) => {
+  if (card) {
+    return <Card card={card} />;
   } else {
-    return (
-      <div className="Card w-16 h-24 bg-white border border-gray-400">
-        <img src={card.images.small} />
-      </div>
-    );
+    return <Card card="?" />;
   }
 };
 
-const PrizeCards = () => {
+const PrizeCards = ({ cards }: { cards: CardT[] }) => {
   return (
     <div className="PrizeCards">
-      <div className="grid grid-rows-6 grid-flow-col h-24">
-        <Card card="r1" />
-        <Card card="r2" />
-        <Card card="r3" />
-        <Card card="r4" />
-        <Card card="r5" />
-        <Card card="r6" />
+      <div className="grid grid-rows-6 grid-flow-col h-56">
+        {cards.map((card, i) => (
+          <Card card={card} key={i} />
+        ))}
       </div>
     </div>
   );
@@ -76,18 +77,14 @@ const Bench = () => {
   );
 };
 
-const Hand = () => {
+const Hand = ({ cards }: { cards: CardT[] }) => {
   return (
     <div className="Hand">
       <div className="text-left text-xs">Hand</div>
       <div className="Hand grid grid-rows-2 grid-flow-col gap-x-1 gap-y-1">
-        <Card card="r1" />
-        <Card card="r2" />
-        <Card card="r3" />
-        <Card card="r4" />
-        <Card card="r5" />
-        <Card card="r6" />
-        <Card card="r7" />
+        {cards.map((card, i) => (
+          <Card card={card} key={i} />
+        ))}
       </div>
     </div>
   );
@@ -113,14 +110,14 @@ const Board = ({ board }: { board: BoardT }) => {
             <Bench />
             <ActiveSpot />
           </div>
-          <PrizeCards />
+          <PrizeCards cards={you.prizeCards} />
         </div>
-        <Hand />
+        <Hand cards={you.hand} />
       </div>
       <hr />
       <div className="flex gap-8">
         <div className="flex gap-4">
-          <PrizeCards />
+          <PrizeCards cards={me.prizeCards} />
           <div className="flex flex-col justify-between">
             <ActiveSpot />
             <Bench />
@@ -130,7 +127,7 @@ const Board = ({ board }: { board: BoardT }) => {
             <DiscardPile cards={[]} />
           </div>
         </div>
-        <Hand />
+        <Hand cards={me.hand} />
       </div>
     </div>
   );
