@@ -1,4 +1,5 @@
-export type ColorT = "R" | "G" | "B" | "Y" | "W"; // red, green, blue, yellow, white
+export type PlayerT = "me" | "you";
+
 export type CardT = {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export type SideT = {
 export type BoardT = {
   you: SideT;
   me: SideT;
+  currentPlayer?: PlayerT;
   lastMove?: MoveT;
 };
 
@@ -33,11 +35,11 @@ export type AllBoardsT = {
 export type MoveT =
   | {
       type: "hint";
-      player: number;
+      player: PlayerT;
     }
   | {
       type: "play" | "discard";
-      player: number;
+      player: PlayerT;
       card: number;
     };
 

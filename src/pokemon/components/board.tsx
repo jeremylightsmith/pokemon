@@ -1,40 +1,66 @@
 import { useDispatch } from "react-redux";
 import { Button } from "../../components/core_components";
 import { BoardT, CardT } from "../types";
-import { startGame } from "../board_slice";
+import { startGame, advance } from "../board_slice";
+import cardBackImage from "../../assets/back-small.png";
 
-const DiscardPile = ({ cards }: { cards: CardT[] }) => (
+const DiscardPile: React.FC<CardsProps> = ({ cards }) => (
   <div className="DiscardPile">
     <Card card={`discards (${cards.length})`} />
   </div>
 );
 
-const Deck = ({ cards }: { cards: CardT[] }) => {
-  if (cards.length === 0) {
+const offsets = [
+  "top-0 left-0",
+  "top-1 left-1 -z-1",
+  "top-2 left-2 -z-2",
+  "top-3 left-3 -z-3",
+  "top-4 left-4 -z-4",
+];
+const Deck: React.FC<CardsProps> = ({ cards }) => (
+  <div className="Deck relative w-36 h-48">
+    {cards.length === 0 ? (
+      <Card card="deck" />
+    ) : (
+      cards.map((card, i) => (
+        <Card
+          card={card}
+          key={i}
+          flipped
+          className={`absolute ${offsets[Math.min(i, 4)]}`}
+        />
+      ))
+    )}
+  </div>
+);
+interface CardProps {
+  card: CardT | string;
+  flipped?: boolean;
+  className?: string;
+}
+
+const Card: React.FC<CardProps> = ({ card, ...props }) => {
+  let classes = "Card w-32 h-44 text-black bg-white border border-gray-400";
+  if (props.className) classes += ` ${props.className}`;
+  if (props.flipped) {
     return (
-      <div className="Deck">
-        <Card card="deck" />
+      <div className={classes}>
+        <img src={cardBackImage} className="w-full" />
+      </div>
+    );
+  } else if (typeof card === "string") {
+    return (
+      <div className={classes}>
+        <div className="w-full p-4 text-center">{card}</div>
       </div>
     );
   } else {
     return (
-      <div className="Deck">
-        <Card card={cards[0]} />
+      <div className={classes}>
+        <img src={card.images.small} className="w-full" />
       </div>
     );
   }
-};
-
-const Card = ({ card }: { card: CardT | string }) => {
-  return (
-    <div className="Card w-32 h-44 text-black bg-white border border-gray-400">
-      {typeof card === "string" ? (
-        <div className="w-full p-4 text-center">{card}</div>
-      ) : (
-        <img src={card.images.small} className="w-full" />
-      )}
-    </div>
-  );
 };
 
 // const CardOrPlaceholder = ({ card }: { card?: CardT }) => {
@@ -45,21 +71,29 @@ const Card = ({ card }: { card: CardT | string }) => {
 //   }
 // };
 
-const PrizeCards = ({ cards }: { cards: CardT[] }) => {
+interface CardsProps {
+  cards: CardT[];
+}
+
+const PrizeCards: React.FC<CardsProps> = ({ cards }) => {
   return (
     <div className="PrizeCards">
       <div className="grid grid-rows-6 grid-flow-col h-56">
         {cards.map((card, i) => (
-          <Card card={card} key={i} />
+          <Card card={card} key={i} flipped />
         ))}
       </div>
     </div>
   );
 };
 
-const ActiveSpot = () => {
+interface ActiveSpotProps {
+  turn: string | undefined;
+}
+const ActiveSpot: React.FC<ActiveSpotProps> = ({ turn }) => {
   return (
-    <div className="ActiveSpot justify-center flex">
+    <div className="ActiveSpot relative justify-center flex">
+      {turn && <div className="absolute top-0 left-0">{turn}</div>}
       <Card card="active" />
     </div>
   );
@@ -77,7 +111,7 @@ const Bench = () => {
   );
 };
 
-const Hand = ({ cards }: { cards: CardT[] }) => {
+const Hand: React.FC<CardsProps> = ({ cards }) => {
   return (
     <div className="Hand">
       <div className="text-left text-xs">Hand</div>
@@ -91,13 +125,17 @@ const Hand = ({ cards }: { cards: CardT[] }) => {
 };
 const Board = ({ board }: { board: BoardT }) => {
   const { you, me } = board;
+  const myTurn = board.currentPlayer == "me";
+  const yourTurn = board.currentPlayer == "you";
   const dispatch = useDispatch();
+
   return (
     <div className="p-4 gap-4 flex flex-col">
       <div className="flex justify-between">
         <h1>Play!</h1>
         <div className="flex gap-4">
           <Button onClick={() => dispatch(startGame())} text="Start" />
+          <Button onClick={() => dispatch(advance())} text="Advance" />
         </div>
       </div>
       <div className="flex gap-8">
@@ -108,7 +146,7 @@ const Board = ({ board }: { board: BoardT }) => {
           </div>
           <div className="flex flex-col justify-between">
             <Bench />
-            <ActiveSpot />
+            <ActiveSpot turn={yourTurn ? "Your turn" : undefined} />
           </div>
           <PrizeCards cards={you.prizeCards} />
         </div>
@@ -119,7 +157,7 @@ const Board = ({ board }: { board: BoardT }) => {
         <div className="flex gap-4">
           <PrizeCards cards={me.prizeCards} />
           <div className="flex flex-col justify-between">
-            <ActiveSpot />
+            <ActiveSpot turn={myTurn ? "My turn" : undefined} />
             <Bench />
           </div>
           <div className="flex flex-col justify-between gap-4">

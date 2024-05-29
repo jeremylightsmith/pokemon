@@ -27,6 +27,11 @@ export const shuffleDeck = (side: SideT) => {
 
 export const setupBoard = curry((board: BoardT) => bothSides(setupSide, board));
 
+export const chooseFirstPlayer = curry((board: BoardT): BoardT => {
+  const coinFlip = Math.random() > 0.5;
+  return { ...board, currentPlayer: coinFlip ? "me" : "you" };
+});
+
 const setupSide = (side: SideT) => {
   let { deck } = side;
   let prizeCards, hand;
@@ -45,3 +50,10 @@ const bothSides = (fn: (side: SideT) => SideT, board: BoardT) => ({
   me: fn(board.me),
   you: fn(board.you),
 });
+
+export const advance = (board: BoardT): BoardT => {
+  return {
+    ...board,
+    lastMove: { type: "hint", player: "me" },
+  };
+};
