@@ -29,19 +29,21 @@ export const setupBoard = curry((board: BoardT) => bothSides(setupSide, board));
 
 export const chooseFirstPlayer = curry((board: BoardT): BoardT => {
   const coinFlip = Math.random() > 0.5;
-  return { ...board, currentPlayer: coinFlip ? "me" : "you" };
+  const currentPlayer = coinFlip ? "me" : "you";
+  return addLog(
+    { player: currentPlayer, move: "wins the coin toss and goes first" },
+    { ...board, currentPlayer },
+  );
 });
 
 const setupSide = (side: SideT) => {
-  let { deck } = side;
-  let prizeCards, hand;
-  [prizeCards, deck] = splitAt(6, deck);
-  [hand, deck] = splitAt(7, deck);
+  const [prizeCards, deck1] = splitAt(6, side.deck);
+  const [hand, deck2] = splitAt(7, deck1);
   return {
     ...side,
     prizeCards,
     hand,
-    deck,
+    deck: deck2,
   };
 };
 

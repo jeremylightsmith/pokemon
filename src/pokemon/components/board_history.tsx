@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import type { BoardT, AllBoardsT } from "../types";
 
 import Board from "./board";
+import { reverse } from "ramda";
 
 const HistoryLink: React.FC<{ board: BoardT }> = ({ board }) => {
   // const toString = (move: MoveT | undefined) => {
@@ -40,7 +41,7 @@ const BoardHistory: React.FC = () => {
 
       <div className="bg-red-800 w-60 flex-none py-1 px-2">
         <div className="text-white pb-1">History</div>
-        {boards.map((board, i) => (
+        {reverse(boards).map((board, i) => (
           <HistoryLink key={i} board={board} />
         ))}
       </div>
