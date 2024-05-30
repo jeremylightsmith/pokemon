@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { initialState } from "./board_slice";
-import { CardT } from "./types";
+import { BoardT, CardT } from "./types";
 import { useDecks, shuffle, setupBoard, advance } from "./model";
 import {
   newEnergy,
@@ -47,7 +47,7 @@ test("setupBoard", () => {
 
 const x = (n: number, card: CardT) => Array(n).fill(card);
 
-test("advance", () => {
+test("advance: pass out basics", () => {
   const deck = flatten([
     x(6, fireEnergy),
     raichu,
@@ -65,4 +65,21 @@ test("advance", () => {
   expect(state1.me.bench).toEqual([]);
   expect(state2.me.active).toEqual(pikachu);
   expect(state2.me.bench).toEqual([charmander, eevee]);
+});
+
+test("advance: draw a card", () => {
+  const deck = [raichu, pikachu];
+  const state0: BoardT = {
+    ...initialState,
+    me: {
+      ...initialState.me,
+      deck,
+    },
+    nextTurn: { player: "me", step: "draw" },
+  };
+  const state1 = advance(state0);
+
+  expect(state1.me.hand).toEqual([raichu]);
+  expect(state1.me.deck).toEqual([pikachu]);
+  expect(state1.nextTurn).toEqual({ player: "me", step: "play" });
 });

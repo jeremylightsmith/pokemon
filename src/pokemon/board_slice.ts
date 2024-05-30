@@ -26,6 +26,7 @@ export const initialState: BoardT = {
     deck: [],
     discardPile: [],
   },
+  nextTurn: {},
   log: [],
 };
 

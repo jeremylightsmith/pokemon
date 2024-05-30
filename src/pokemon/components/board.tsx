@@ -130,8 +130,8 @@ const Hand: React.FC<CardsProps> = ({ cards }) => {
 };
 const Board = ({ board }: { board: BoardT }) => {
   const { you, me } = board;
-  const myTurn = board.currentPlayer == "me";
-  const yourTurn = board.currentPlayer == "you";
+  const myTurn = board.nextTurn.player == "me";
+  const yourTurn = board.nextTurn.player == "you";
   const dispatch = useDispatch();
 
   return (

@@ -29,10 +29,10 @@ export const setupBoard = curry((board: BoardT) => bothSides(setupSide, board));
 
 export const chooseFirstPlayer = curry((board: BoardT): BoardT => {
   const coinFlip = Math.random() > 0.5;
-  const currentPlayer = coinFlip ? "me" : "you";
+  const player = coinFlip ? "me" : "you";
   return addLog(
-    { player: currentPlayer, move: "wins the coin toss and goes first" },
-    { ...board, currentPlayer },
+    { player, move: "wins the coin toss and goes first" },
+    { ...board, nextTurn: { player, step: "draw" } },
   );
 });
 
@@ -54,18 +54,41 @@ const bothSides = curry((fn: (side: SideT) => SideT, board: BoardT) => ({
 }));
 
 export const advance = (board: BoardT): BoardT => {
-  if (!board.currentPlayer) {
+  if (!board.nextTurn.player) {
     return pipe<[BoardT], BoardT, BoardT, BoardT>(
       bothSides(startBasicPokemon),
       addLog({ move: "played basic pokemon" }),
       chooseFirstPlayer(),
     )(board);
+  } else if (board.nextTurn.step == "draw") {
+    return {
+      ...addLog(
+        { player: board.nextTurn.player, move: "drew a card" },
+        oneSide(drawCard, board),
+      ),
+      nextTurn: { ...board.nextTurn, step: "play" },
+    };
   } else {
     return {
       ...board,
       log: [{ move: "nothin'" }],
     };
   }
+};
+
+const oneSide = (fn: (side: SideT) => SideT, board: BoardT) => {
+  if (board.nextTurn.player == "me") {
+    return { ...board, me: fn(board.me) };
+  } else if (board.nextTurn.player == "you") {
+    return { ...board, you: fn(board.you) };
+  } else {
+    return board;
+  }
+};
+
+const drawCard = (side: SideT) => {
+  const [card, ...deck] = side.deck;
+  return { ...side, hand: [...side.hand, card], deck };
 };
 
 const startBasicPokemon = (side: SideT) => {

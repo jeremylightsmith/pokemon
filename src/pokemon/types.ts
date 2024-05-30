@@ -133,10 +133,15 @@ export type SideT = {
   discardPile: CardT[];
 };
 
+export type TurnT = {
+  player?: PlayerT;
+  step?: "draw" | "play" | "attack";
+};
+
 export type BoardT = {
   you: SideT;
   me: SideT;
-  currentPlayer?: PlayerT;
+  nextTurn: TurnT;
   log: MoveT[];
 };
 
