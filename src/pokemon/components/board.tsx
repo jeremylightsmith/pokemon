@@ -33,6 +33,7 @@ const Deck: React.FC<CardsProps> = ({ cards }) => (
     )}
   </div>
 );
+
 interface CardProps {
   card: CardT | string;
   flipped?: boolean;
@@ -40,7 +41,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card, ...props }) => {
-  let classes = "Card w-32 h-44 text-black bg-white border border-gray-400";
+  let classes = "Card w-32 h-44 rounded";
   if (props.className) classes += ` ${props.className}`;
   if (props.flipped) {
     return (
@@ -50,7 +51,7 @@ const Card: React.FC<CardProps> = ({ card, ...props }) => {
     );
   } else if (typeof card === "string") {
     return (
-      <div className={classes}>
+      <div className={classes + " border border-gray-400 bg-white text-black"}>
         <div className="w-full p-4 text-center">{card}</div>
       </div>
     );
@@ -63,13 +64,13 @@ const Card: React.FC<CardProps> = ({ card, ...props }) => {
   }
 };
 
-// const CardOrPlaceholder = ({ card }: { card?: CardT }) => {
-//   if (card) {
-//     return <Card card={card} />;
-//   } else {
-//     return <Card card="?" />;
-//   }
-// };
+const CardOrPlaceholder = ({ card }: { card?: CardT }) => {
+  if (card) {
+    return <Card card={card} />;
+  } else {
+    return <Card card="?" />;
+  }
+};
 
 interface CardsProps {
   cards: CardT[];
@@ -88,25 +89,29 @@ const PrizeCards: React.FC<CardsProps> = ({ cards }) => {
 };
 
 interface ActiveSpotProps {
+  card: CardT | undefined;
   turn: string | undefined;
 }
-const ActiveSpot: React.FC<ActiveSpotProps> = ({ turn }) => {
+const ActiveSpot: React.FC<ActiveSpotProps> = ({ card, turn }) => {
   return (
     <div className="ActiveSpot relative justify-center flex">
       {turn && <div className="absolute top-0 left-0">{turn}</div>}
-      <Card card="active" />
+      <CardOrPlaceholder card={card} />
     </div>
   );
 };
 
-const Bench = () => {
+const Bench: React.FC<CardsProps> = ({ cards }) => {
   return (
     <div className="Bench grid grid-rows-1 grid-flow-col gap-1">
-      <Card card="r1" />
-      <Card card="r2" />
-      <Card card="r3" />
-      <Card card="r4" />
-      <Card card="r5" />
+      {cards.map((card, i) => (
+        <Card card={card} key={i} />
+      ))}
+      {Array(5 - cards.length)
+        .fill(0)
+        .map((_, i) => (
+          <Card card="bench" key={i} />
+        ))}
     </div>
   );
 };
@@ -145,8 +150,11 @@ const Board = ({ board }: { board: BoardT }) => {
             <Deck cards={you.deck} />
           </div>
           <div className="flex flex-col justify-between">
-            <Bench />
-            <ActiveSpot turn={yourTurn ? "Your turn" : undefined} />
+            <Bench cards={you.bench} />
+            <ActiveSpot
+              card={you.active}
+              turn={yourTurn ? "Your turn" : undefined}
+            />
           </div>
           <PrizeCards cards={you.prizeCards} />
         </div>
@@ -157,8 +165,11 @@ const Board = ({ board }: { board: BoardT }) => {
         <div className="flex gap-4">
           <PrizeCards cards={me.prizeCards} />
           <div className="flex flex-col justify-between">
-            <ActiveSpot turn={myTurn ? "My turn" : undefined} />
-            <Bench />
+            <ActiveSpot
+              card={me.active}
+              turn={myTurn ? "My turn" : undefined}
+            />
+            <Bench cards={me.bench} />
           </div>
           <div className="flex flex-col justify-between gap-4">
             <Deck cards={me.deck} />

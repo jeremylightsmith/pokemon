@@ -1,19 +1,20 @@
 import { expect, test } from "vitest";
 import { initialState } from "./board_slice";
 import { CardT } from "./types";
-import { map } from "ramda";
-import { useDecks, shuffle, setupBoard } from "./model";
+import { useDecks, shuffle, setupBoard, advance } from "./model";
+import {
+  newEnergy,
+  pikachu,
+  raichu,
+  fireEnergy,
+  grassEnergy,
+  charmander,
+  eevee,
+} from "./card_factory";
+import { flatten } from "ramda";
 
-const newCard = (name: string): CardT => ({
-  id: name,
-  name: name,
-  images: {
-    small: "",
-    large: "",
-  },
-});
-
-const newCards = (n: number) => map((n) => newCard(`card${n}`), Array(n));
+const newCards = (n: number) =>
+  Array(n).map((n) => newEnergy({ name: `card${n}` }));
 
 test("useDeck", () => {
   const deck1 = newCards(10);
@@ -42,4 +43,26 @@ test("setupBoard", () => {
   expect(you.prizeCards).toEqual([b[0], b[1], b[2], b[3], b[4], b[5]]);
   expect(you.hand).toEqual([b[6], b[7], b[8], b[9], b[10], b[11], b[12]]);
   expect(you.deck.length).toBe(47);
+});
+
+const x = (n: number, card: CardT) => Array(n).fill(card);
+
+test("advance", () => {
+  const deck = flatten([
+    x(6, fireEnergy),
+    raichu,
+    pikachu,
+    raichu,
+    charmander,
+    fireEnergy,
+    eevee,
+    x(5, grassEnergy),
+  ]);
+  const state1 = setupBoard(useDecks({ me: deck, you: deck }, initialState));
+  const state2 = advance(state1);
+
+  expect(state1.me.active).toEqual(undefined);
+  expect(state1.me.bench).toEqual([]);
+  expect(state2.me.active).toEqual(pikachu);
+  expect(state2.me.bench).toEqual([charmander, eevee]);
 });

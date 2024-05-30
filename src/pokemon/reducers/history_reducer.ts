@@ -12,7 +12,7 @@ export default function historyReducer(state = INITIAL_STATE, action: any) {
   if (action.type.startsWith("board/")) {
     const newBoard = boardReducer(state.currentBoard, action);
     return {
-      currentBoard: newBoard,
+      currentBoard: { ...newBoard, log: [] },
       boards: append(newBoard, state.boards),
     };
   } else {

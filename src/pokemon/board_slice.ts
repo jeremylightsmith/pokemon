@@ -5,8 +5,8 @@ import {
   useDecks,
   shuffle,
   setupBoard,
-  chooseFirstPlayer,
   advance as advanceBoard,
+  addLog,
 } from "./model";
 
 export const initialState: BoardT = {
@@ -26,21 +26,21 @@ export const initialState: BoardT = {
     deck: [],
     discardPile: [],
   },
-  lastMove: undefined,
+  log: [],
 };
 
 const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: (create) => ({
-    startGame: create.reducer((state: BoardT) => {
+    startGame: create.reducer(() => {
       const deck = JSON.parse(localStorage.getItem("deck") || "[]");
       return pipe<[BoardT], BoardT, BoardT, BoardT, BoardT>(
         useDecks({ me: deck, you: deck }),
         shuffle(),
         setupBoard(),
-        chooseFirstPlayer(),
-      )(state);
+        addLog({ move: "started game" }),
+      )(initialState);
     }),
     advance: create.reducer((state: BoardT) => {
       return advanceBoard(state);

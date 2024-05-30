@@ -35,8 +35,24 @@ export const fetchNoCache = async (url: string) => {
   return await response.json();
 };
 
+const cardFields = [
+  "id",
+  "name",
+  "supertype",
+  "subtypes",
+  "hp",
+  "types",
+  "evolvesTo",
+  "abilities",
+  "attacks",
+  "weaknesses",
+  "resistances",
+  "retreatCost",
+  "convertedRetreatCost",
+  "images",
+];
 export const findCards = async (searchTerm: string) => {
   return fetchNoCache(
-    `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&select=id,name,images`,
+    `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&select=${cardFields.join(",")}`,
   );
 };

@@ -1,13 +1,126 @@
 export type PlayerT = "me" | "you";
 
-export type CardT = {
+export type SubtypeT =
+  | "ACE SPEC"
+  | "Ancient"
+  | "BREAK"
+  | "Baby"
+  | "Basic"
+  | "EX"
+  | "Eternamax"
+  | "Fusion Strike"
+  | "Future"
+  | "GX"
+  | "Goldenrod Game Corner"
+  | "Item"
+  | "LEGEND"
+  | "Level-Up"
+  | "MEGA"
+  | "Pokémon Tool"
+  | "Pokémon Tool F"
+  | "Prime"
+  | "Prism Star"
+  | "Radiant"
+  | "Rapid Strike"
+  | "Restored"
+  | "Rocket's Secret Machine"
+  | "SP"
+  | "Single Strike"
+  | "Special"
+  | "Stadium"
+  | "Stage 1"
+  | "Stage 2"
+  | "Star"
+  | "Supporter"
+  | "TAG TEAM"
+  | "Team Plasma"
+  | "Technical Machine"
+  | "Tera"
+  | "Ultra Beast"
+  | "V"
+  | "V-UNION"
+  | "VMAX"
+  | "VSTAR"
+  | "ex";
+
+export type TypeT =
+  | "Colorless"
+  | "Darkness"
+  | "Dragon"
+  | "Fairy"
+  | "Fighting"
+  | "Fire"
+  | "Grass"
+  | "Lightning"
+  | "Metal"
+  | "Psychic"
+  | "Water";
+
+export type AbilityT = {
+  name: string;
+  text: string;
+  type: string; // maybe "Poké-Power" | "Poké-Body" | "Ability";
+};
+
+export type AttackT = {
+  name: string;
+  cost: TypeT[];
+  convertedEnergyCost: number;
+  damage: string;
+  text: string;
+};
+
+export type TypeValueT = {
+  type: TypeT;
+  value: string; // e.g. +20 or -10
+};
+
+export type PokemonT = {
   id: string;
   name: string;
+  supertype: "Pokémon";
+  subtypes: SubtypeT[];
+  hp: number; // convert
+  types: TypeT[];
+  evolvesTo?: string[];
+  evolvesFrom?: string;
+  abilities: AbilityT[];
+  attacks: AttackT[];
+  weaknesses: TypeValueT[];
+  resistances: TypeValueT[];
+  retreatCost: TypeT[];
+  convertedRetreatCost: number;
   images: {
     small: string;
     large: string;
   };
 };
+
+export type EnergyT = {
+  id: string;
+  name: string;
+  supertype: "Energy";
+  subtypes: SubtypeT[];
+  images: {
+    small: string;
+    large: string;
+  };
+};
+
+export type TrainerT = {
+  id: string;
+  name: string;
+  supertype: "Trainer";
+  subtypes: SubtypeT[];
+  rules: string[];
+  attacks?: AttackT[];
+  images: {
+    small: string;
+    large: string;
+  };
+};
+
+export type CardT = PokemonT | EnergyT | TrainerT;
 
 export type DeckT = CardT[];
 
@@ -24,7 +137,7 @@ export type BoardT = {
   you: SideT;
   me: SideT;
   currentPlayer?: PlayerT;
-  lastMove?: MoveT;
+  log: MoveT[];
 };
 
 export type AllBoardsT = {
@@ -32,16 +145,10 @@ export type AllBoardsT = {
   boards: BoardT[];
 };
 
-export type MoveT =
-  | {
-      type: "hint";
-      player: PlayerT;
-    }
-  | {
-      type: "play" | "discard";
-      player: PlayerT;
-      card: number;
-    };
+export type MoveT = {
+  move: string;
+  player?: PlayerT;
+};
 
 // prize cards, start game w/ 6, then claim when you beat a pokemon
 // game is won when prize cards are gone
